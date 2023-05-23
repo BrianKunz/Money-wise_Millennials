@@ -1,4 +1,7 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
+import bcrypt from "bcrypt";
+
+const SALT_ROUNDS = 12;
 
 require("./comment.model");
 require("./post.model");
@@ -20,6 +23,12 @@ const UserSchema: Schema = new Schema({
   admin: { type: Boolean, required: true, default: false },
   posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+});
+
+UserSchema.pre("save", async function (this: IUser, next) {
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
+  return next();
 });
 
 export default mongoose.model<IUser>("User", UserSchema);
