@@ -1,30 +1,23 @@
-import * as Mongoose from "mongoose";
+import Mongoose from "mongoose";
 
-let database: Mongoose.Connection;
-
-export const connect = () => {
+export const connect = async () => {
   const uri = process.env.MONGO_URI || "default-uri";
 
-  if (database) {
-    return;
+  try {
+    const connection = await Mongoose.connect(uri);
+    const database = connection.connection;
+    database.once("open", async () => {
+      console.log("Connect to database");
+    });
+
+    database.on("error", () => {
+      console.log("Error connecting to database");
+    });
+  } catch (error) {
+    console.error("Error while connecting to MongoDB", error);
   }
-
-  Mongoose.connect(uri);
-
-  database = Mongoose.connection;
-
-  database.once("open", async () => {
-    console.log("Connect to database");
-  });
-
-  database.on("error", () => {
-    console.log("Error connecting to database");
-  });
 };
 
 export const disconnect = () => {
-  if (!database) {
-    return;
-  }
   Mongoose.disconnect();
 };
