@@ -22,6 +22,6 @@
     "types": ["node"],
     "lib": ["ES6", "DOM"]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "types.d.ts"],
   "exclude": ["node_modules"]
 }

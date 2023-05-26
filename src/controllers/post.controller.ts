@@ -1,10 +1,20 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import Post from "../models/post.model";
+import { IUser } from "../models/user.model";
 
 const postController = express.Router();
 
+// Admin check middleware
+function isAdmin(req: Request, res: Response, next: NextFunction) {
+  if (req.isAuthenticated() && (req.user as IUser).admin) {
+    next();
+  } else {
+    res.status(403).json({ message: "Unauthorized" });
+  }
+}
+
 // Get all posts
-postController.get("/", async (res: Response) => {
+postController.get("/", async (_: Request, res: Response) => {
   try {
     const posts = await Post.find();
     res.json(posts);
@@ -28,9 +38,11 @@ postController.get("/:id", async (req: Request, res: Response) => {
 });
 
 // Create new post
-postController.post("/", async (req: Request, res: Response) => {
+postController.post("/", isAdmin, async (req: Request, res: Response) => {
   try {
-    const post = new Post(req.body);
+    const { title, body, image } = req.body;
+    const user = (req.user as IUser)._id; // Get the authenticated user's ID
+    const post = new Post({ title, body, image, user }); // Create the post with user ID
     await post.save();
     res.status(201).json(post);
   } catch (error) {
@@ -40,7 +52,7 @@ postController.post("/", async (req: Request, res: Response) => {
 });
 
 // Update a post
-postController.put("/:id", async (req: Request, res: Response) => {
+postController.put("/:id", isAdmin, async (req: Request, res: Response) => {
   try {
     const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -55,7 +67,7 @@ postController.put("/:id", async (req: Request, res: Response) => {
 });
 
 // Delete a post
-postController.delete("/:id", async (req: Request, res: Response) => {
+postController.delete("/:id", isAdmin, async (req: Request, res: Response) => {
   try {
     const post = await Post.findByIdAndDelete(req.params.id);
     if (!post) return res.status(404).json({ message: "Post not found." });

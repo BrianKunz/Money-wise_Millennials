@@ -41,15 +41,19 @@ userController.post("/signup", async (req: Request, res: Response) => {
 
 // Login user
 userController.post("/login", (req: Request, res: Response, next) => {
+  console.log("Login attempt:", req.body); // Log request body
+
   passport.authenticate(
     "local",
     (err: Error, user: IUser | false, info?: { message: string }) => {
       if (err) {
-        console.error(err);
+        console.error("Authentication error:", err); // Log authentication error
         return res.status(500).json(err);
       }
 
-      if (!user || !info) {
+      console.log("Authentication info:", info); // Log authentication info
+
+      if (!user) {
         return res
           .status(401)
           .json({ message: info ? info.message : "No user found." });
@@ -57,13 +61,13 @@ userController.post("/login", (req: Request, res: Response, next) => {
 
       req.logIn(user, (err) => {
         if (err) {
-          console.error(err);
+          console.error("Login error:", err); // Log login error
           return res.status(500).json(err);
         }
 
         // Generate JWT token
         const secret = process.env.JWT_SECRET || "default-secret";
-        const token = jwt.sign({ userId: user._id }, secret);
+        const token = jwt.sign({ userId: user._id, admin: user.admin }, secret);
 
         return res.json({
           message: "Logged in successfully",
