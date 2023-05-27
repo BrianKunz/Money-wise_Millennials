@@ -3,14 +3,13 @@ import { IPost } from "../models/post.model";
 const baseURL = "http://localhost:3000/posts/";
 
 export const postService = {
-  getAll: async (post: IPost): Promise<IPost> => {
+  getAll: async (): Promise<IPost[]> => {
     try {
       const response = await fetch(`${baseURL}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(post),
       });
 
       if (!response.ok) {
@@ -25,31 +24,30 @@ export const postService = {
     }
   },
 
-  getOne: async (post: IPost, id: string): Promise<IPost> => {
+  getOne: async (id: string): Promise<IPost> => {
     try {
       const response = await fetch(`${baseURL}/${id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(post),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to get all posts");
+        throw new Error("Failed to get post");
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error("Error getting all posts: ", error);
+      console.error("Error getting post: ", error);
       throw error;
     }
   },
 
   create: async (post: IPost): Promise<IPost> => {
     try {
-      console.log("Post data :", post);
+      console.log("Post data: ", post);
 
       const response = await fetch(`${baseURL}create`, {
         method: "POST",
@@ -74,7 +72,7 @@ export const postService = {
 
   update: async (post: IPost, id: string): Promise<IPost> => {
     try {
-      console.log("Post data : ", post);
+      console.log("Post data: ", post);
 
       const response = await fetch(`${baseURL}/${id}`, {
         method: "PUT",
@@ -96,14 +94,13 @@ export const postService = {
     }
   },
 
-  delete: async (post: IPost, id: string): Promise<IPost> => {
+  delete: async (id: string): Promise<IPost> => {
     try {
       const response = await fetch(`${baseURL}/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(post),
       });
 
       if (!response.ok) {
@@ -114,6 +111,7 @@ export const postService = {
       return data;
     } catch (error) {
       console.error("Error deleting post: ", error);
+      throw error;
     }
   },
 };
