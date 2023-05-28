@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
+import { IUser } from "./user.model";
 
 require("./user.model");
 require("./comment.model");
@@ -8,7 +9,7 @@ export interface IPost extends Document {
   title: string;
   body: string;
   image: string;
-  user: ObjectId;
+  user: IUser;
   comments: ObjectId[];
 }
 
