@@ -7,7 +7,7 @@ require("./comment.model");
 require("./post.model");
 
 export interface IUser extends Document {
-  _id: ObjectId;
+  _id: string;
   email: string;
   username: string;
   password: string;

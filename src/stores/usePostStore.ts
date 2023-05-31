@@ -6,11 +6,11 @@ import { IPost } from "../models/post.model";
 interface PostStore {
   posts: IPost[];
   user: IUser | null;
-  post?: IPost | null;
+  post?: IPost;
   getAllPosts: () => Promise<void>;
   getOnePost: (id: string) => Promise<void | IPost>;
   createNewPost: (post: IPost) => Promise<void>;
-  updatePost: (id: string, updatedPost: IPost) => Promise<void>;
+  updatePost: (post: IPost) => Promise<void>;
   deletePost: (id: string) => Promise<void>;
 }
 
@@ -49,13 +49,13 @@ export const usePostStore = create<PostStore>((set, get) => ({
   },
   updatePost: async (post) => {
     try {
-      const { id, ...updatedPost } = post;
-      await postService.update(_id, updatedPost);
+      await postService.update(post, post._id.toString());
       await get().getAllPosts();
     } catch (error) {
       console.error(error);
     }
   },
+
   deletePost: async (id) => {
     try {
       await postService.delete(id);

@@ -5,7 +5,7 @@ require("./user.model");
 require("./comment.model");
 
 export interface IPost extends Document {
-  _id: ObjectId;
+  _id: string;
   title: string;
   body: string;
   image: string;

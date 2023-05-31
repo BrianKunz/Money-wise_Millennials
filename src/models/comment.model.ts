@@ -4,7 +4,7 @@ require("./post.model");
 require("./user.model");
 
 export interface IComment extends Document {
-  _id: ObjectId;
+  _id: string;
   body: string;
   timestamp: Date;
   user: ObjectId;
