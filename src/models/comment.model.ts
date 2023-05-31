@@ -1,4 +1,6 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
+import { IUser } from "./user.model";
+import { IPost } from "./post.model";
 
 require("./post.model");
 require("./user.model");
@@ -7,8 +9,8 @@ export interface IComment extends Document {
   _id: string;
   body: string;
   timestamp: Date;
-  user: ObjectId;
-  post: ObjectId;
+  user: ObjectId | IUser;
+  post: ObjectId | IPost;
 }
 
 const CommentSchema: Schema = new Schema({

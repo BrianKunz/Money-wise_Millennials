@@ -5,7 +5,7 @@ const baseURL = "http://localhost:3000/";
 export const commentService = {
   getAll: async (postId: string): Promise<IComment[]> => {
     try {
-      const response = await fetch(`${baseURL}/post/${postId}`, {
+      const response = await fetch(`${baseURL}/post/${postId}/comments`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -26,13 +26,16 @@ export const commentService = {
 
   create: async (postId: string, comment: IComment): Promise<IComment> => {
     try {
-      const response = await fetch(`${baseURL}/post/${postId}/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(comment),
-      });
+      const response = await fetch(
+        `${baseURL}/post/${postId}/comments/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(comment),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to create comment");
@@ -49,7 +52,7 @@ export const commentService = {
 
   delete: async (postId: string, id: string): Promise<IComment> => {
     try {
-      const response = await fetch(`${baseURL}/post/${postId}/${id}`, {
+      const response = await fetch(`${baseURL}/post/${postId}/comments/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
