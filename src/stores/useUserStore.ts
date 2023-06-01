@@ -8,6 +8,7 @@ type UserStore = {
   error: string | null;
   login: (user: IUser) => Promise<void>;
   logout: () => void;
+  createUser: (user: IUser) => Promise<void>; // Add createUser function
 };
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -28,5 +29,13 @@ export const useUserStore = create<UserStore>((set) => ({
   },
   logout: () => {
     set({ user: null, loading: false, error: null });
+  },
+  createUser: async (user) => {
+    try {
+      await userService.create(user);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   },
 }));
