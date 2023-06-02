@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useUserStore } from "../../stores/useUserStore";
-import { IUser } from "../../models/user.model";
+import { useUserStore } from "../../../stores/useUserStore";
+import { IUser } from "../../../models/user.model";
 
 export interface FormInputs {
   email: string;

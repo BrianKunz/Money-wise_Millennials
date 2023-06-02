@@ -7,13 +7,13 @@ require("./comment.model");
 require("./post.model");
 
 export interface IUser extends Document {
-  _id: string;
-  email: string;
+  _id?: string;
+  email?: string;
   username: string;
   password: string;
-  admin: boolean;
-  posts: ObjectId[];
-  comments: ObjectId[];
+  admin?: boolean;
+  posts?: ObjectId[];
+  comments?: ObjectId[];
 }
 
 const UserSchema: Schema = new Schema({

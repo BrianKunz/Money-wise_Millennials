@@ -9,8 +9,8 @@ export interface IPost extends Document {
   title: string;
   body: string;
   image: string;
-  user: IUser;
-  comments: ObjectId[];
+  user?: IUser;
+  comments?: ObjectId[];
 }
 
 const PostSchema: Schema = new Schema({
