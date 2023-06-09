@@ -4,7 +4,7 @@ import Comment from "../models/comment.model";
 const commentController = express.Router();
 
 // Get all comments
-commentController.get("/", async (res: Response) => {
+commentController.get("/", async (_, res: Response) => {
   try {
     const comments = await Comment.find();
     res.json(comments);

@@ -1,6 +1,6 @@
 import { IComment } from "../models/comment.model";
 
-const baseURL = "http://localhost:3000/";
+const baseURL = "http://localhost:3001";
 
 export const commentService = {
   getAll: async (postId: string): Promise<IComment[]> => {
@@ -26,16 +26,13 @@ export const commentService = {
 
   create: async (postId: string, comment: IComment): Promise<IComment> => {
     try {
-      const response = await fetch(
-        `${baseURL}/post/${postId}/comments/create`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(comment),
-        }
-      );
+      const response = await fetch(`${baseURL}/post/${postId}/comments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(comment),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to create comment");

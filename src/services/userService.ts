@@ -1,6 +1,6 @@
 import { IUser } from "../models/user.model";
 
-const baseURL = "http://localhost:3000/users/";
+const baseURL = "http://localhost:3001/users/";
 
 export const userService = {
   create: async (user: IUser): Promise<IUser> => {

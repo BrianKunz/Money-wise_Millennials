@@ -20,6 +20,9 @@ export const usePostStore = create<PostStore>((set, get) => ({
   getAllPosts: async () => {
     try {
       const posts = await postService.getAll();
+      posts.forEach((post) => {
+        console.log(post._id); // Log the ID of each post
+      });
       set({ posts });
     } catch (error) {
       console.error(error);
@@ -27,6 +30,7 @@ export const usePostStore = create<PostStore>((set, get) => ({
   },
   getOnePost: async (id) => {
     try {
+      console.log("Post ID: ", id);
       const post = await postService.getOne(id);
       set({ post });
     } catch (error) {

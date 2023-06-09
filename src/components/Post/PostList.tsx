@@ -16,12 +16,12 @@ export default function PostList() {
         <CreatePost />
         {Array.isArray(posts) && posts.length > 0 ? (
           posts.map((post) => (
-            <div key={post.id}>
-              <Link to={`/posts/${post.id}`}>
+            <div key={post._id}>
+              <Link to={`/posts/${post._id}`}>
                 <img src={post.image} alt={post.title} />
               </Link>
               <div>
-                <Link to={`/posts/${post.id}`}>
+                <Link to={`/posts/${post._id}`}>
                   <h2>{post.title}</h2>
                 </Link>
                 <p>{post.body}</p>
