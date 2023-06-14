@@ -5,7 +5,7 @@ const baseURL = "http://localhost:3001";
 export const commentService = {
   getAll: async (postId: string): Promise<IComment[]> => {
     try {
-      const response = await fetch(`${baseURL}/post/${postId}/comments`, {
+      const response = await fetch(`${baseURL}/posts/${postId}/comments`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -26,7 +26,7 @@ export const commentService = {
 
   create: async (postId: string, comment: IComment): Promise<IComment> => {
     try {
-      const response = await fetch(`${baseURL}/post/${postId}/comments`, {
+      const response = await fetch(`${baseURL}/posts/${postId}/comments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,12 +49,15 @@ export const commentService = {
 
   delete: async (postId: string, id: string): Promise<IComment> => {
     try {
-      const response = await fetch(`${baseURL}/post/${postId}/comments/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${baseURL}/posts/${postId}/comments/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Delete failed");

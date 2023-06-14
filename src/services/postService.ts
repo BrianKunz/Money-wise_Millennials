@@ -26,7 +26,7 @@ export const postService = {
 
   getOne: async (id: string): Promise<IPost> => {
     try {
-      const response = await fetch(`${baseURL}/${id}`, {
+      const response = await fetch(`${baseURL}${id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +74,7 @@ export const postService = {
     try {
       console.log("Post data: ", post);
 
-      const response = await fetch(`${baseURL}/${id}`, {
+      const response = await fetch(`${baseURL}${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -96,7 +96,7 @@ export const postService = {
 
   delete: async (id: string): Promise<IPost> => {
     try {
-      const response = await fetch(`${baseURL}/${id}`, {
+      const response = await fetch(`${baseURL}${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
