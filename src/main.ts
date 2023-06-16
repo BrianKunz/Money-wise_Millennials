@@ -34,8 +34,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/users", userController);
-app.use("/posts", postController);
 app.use("/comments", commentController);
+app.use("/posts", postController);
 
 app.get("/", (_, res) => {
   res.json({ message: "Service is alive" });

@@ -3,71 +3,92 @@ import Comment from "../models/comment.model";
 
 const commentController = express.Router();
 
-// Get all comments
-commentController.get("/", async (_, res: Response) => {
-  try {
-    const comments = await Comment.find();
-    res.json(comments);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error });
+// Get all comments for a post
+commentController.get(
+  "/posts/:id/comments",
+  async (req: Request, res: Response) => {
+    try {
+      const postId = req.params.id; // Extract the postId from the route parameter
+      console.log("Post ID:", postId);
+      const comments = await Comment.find({ postId: postId });
+      res.json(comments);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: error });
+    }
   }
-});
+);
 
 // Get a comment by ID
-commentController.get("/:id", async (req: Request, res: Response) => {
-  try {
-    const comment = await Comment.findById(req.params.id);
-    if (!comment)
-      return res.status(404).json({ message: "Comment not found." });
-    res.json(comment);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error });
+commentController.get(
+  "/posts/:id/comments/:id",
+  async (req: Request, res: Response) => {
+    try {
+      const comment = await Comment.findById(req.params.id);
+      if (!comment)
+        return res.status(404).json({ message: "Comment not found." });
+      res.json(comment);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: error });
+    }
+    return;
   }
-  return;
-});
+);
 
 // Create new comment
-commentController.post("/", async (req: Request, res: Response) => {
-  try {
-    const comment = new Comment(req.body);
-    await comment.save();
-    res.status(201).json(comment);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error });
+commentController.post(
+  "/posts/:id/comments",
+  async (req: Request, res: Response) => {
+    try {
+      const postId = req.params.id; // Extract the postId from the route parameter
+      console.log("Post ID:", postId); // Log the postId
+      const comment = new Comment({ ...req.body, postId }); // Assign the postId to the comment
+      console.log("Comment:", comment); // Log the comment object
+      await comment.save();
+      console.log("Comment saved:", comment); // Log the saved comment object
+      res.status(201).json(comment);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: error });
+    }
   }
-});
+);
 
 // Update a comment
-commentController.put("/:id", async (req: Request, res: Response) => {
-  try {
-    const comment = await Comment.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    if (!comment)
-      return res.status(404).json({ message: "Comment not found." });
-    res.json(comment);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error });
+commentController.put(
+  "/posts/:id/comments/:id",
+  async (req: Request, res: Response) => {
+    try {
+      const comment = await Comment.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+      });
+      if (!comment)
+        return res.status(404).json({ message: "Comment not found." });
+      res.json(comment);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: error });
+    }
+    return;
   }
-  return;
-});
+);
 
 // Delete a comment
-commentController.delete("/:id", async (req: Request, res: Response) => {
-  try {
-    const comment = await Comment.findByIdAndDelete(req.params.id);
-    if (!comment)
-      return res.status(404).json({ message: "Comment not found." });
-    res.status(204).json({ message: "Comment deleted." });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error });
+commentController.delete(
+  "/posts/:id/comments/:id",
+  async (req: Request, res: Response) => {
+    try {
+      const comment = await Comment.findByIdAndDelete(req.params.id);
+      if (!comment)
+        return res.status(404).json({ message: "Comment not found." });
+      res.status(204).json({ message: "Comment deleted." });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: error });
+    }
+    return;
   }
-  return;
-});
+);
 
 export default commentController;
