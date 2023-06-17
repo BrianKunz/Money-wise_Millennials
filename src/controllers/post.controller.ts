@@ -27,6 +27,7 @@ postController.get("/", async (_: Request, res: Response) => {
 // Get a post by ID with populated comments
 postController.get("/:id", async (req: Request, res: Response) => {
   try {
+    console.log("Post ID:", req.params.id);
     const post = await Post.findById(req.params.id).populate("comments");
     if (!post) return res.status(404).json({ message: "Post not found." });
     res.json(post);

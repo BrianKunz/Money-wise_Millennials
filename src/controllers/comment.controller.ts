@@ -9,7 +9,6 @@ commentController.get(
   async (req: Request, res: Response) => {
     try {
       const postId = req.params.id; // Extract the postId from the route parameter
-      console.log("Post ID:", postId);
       const comments = await Comment.find({ postId: postId });
       res.json(comments);
     } catch (error) {
