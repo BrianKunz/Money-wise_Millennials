@@ -50,4 +50,24 @@ export const userService = {
       throw error;
     }
   },
+  getUserById: async (userId: string): Promise<IUser> => {
+    try {
+      const response = await fetch(`${baseURL}${userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user by ID.");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching user by ID: ", error);
+      throw error;
+    }
+  },
 };

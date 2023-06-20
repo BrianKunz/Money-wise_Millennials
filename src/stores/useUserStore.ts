@@ -8,7 +8,9 @@ type UserStore = {
   error: string | null;
   login: (user: IUser) => Promise<void>;
   logout: () => void;
-  createUser: (user: IUser) => Promise<void>; // Add createUser function
+  createUser: (user: IUser) => Promise<void>;
+  getUserById: (userId: string) => Promise<IUser | undefined>;
+  users: { [key: string]: IUser };
 };
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -38,4 +40,19 @@ export const useUserStore = create<UserStore>((set) => ({
       throw error;
     }
   },
+  getUserById: async (userId) => {
+    try {
+      const user = await userService.getUserById(userId);
+      if (user) {
+        set((state) => ({
+          users: { ...state.users, [user._id || ""]: user },
+        }));
+      }
+      return user;
+    } catch (error) {
+      console.error("Error fetching user by ID: ", error);
+      throw error;
+    }
+  },
+  users: {},
 }));

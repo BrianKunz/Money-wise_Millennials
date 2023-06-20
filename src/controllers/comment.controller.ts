@@ -9,7 +9,7 @@ commentController.get(
   async (req: Request, res: Response) => {
     try {
       const postId = req.params.id; // Extract the postId from the route parameter
-      const comments = await Comment.find({ postId: postId });
+      const comments = await Comment.find({ post: postId });
       res.json(comments);
     } catch (error) {
       console.error(error);
