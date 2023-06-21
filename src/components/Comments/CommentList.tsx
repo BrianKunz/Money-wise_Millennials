@@ -1,12 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCommentStore } from "../../stores/useCommentStore";
 import { IComment } from "../../models/comment.model";
 import { usePostStore } from "../../stores/usePostStore";
 import { IPost } from "../../models/post.model";
-import { IUser } from "../../models/user.model";
 import { useUserStore } from "../../stores/useUserStore";
-import { ObjectId } from "mongoose";
 
 interface Props {
   postId: string;
@@ -15,7 +13,10 @@ interface Props {
 const CommentList: React.FC<Props> = ({ postId }) => {
   const { getOnePost } = usePostStore();
   const { comments, getAllComments } = useCommentStore();
-  const { users } = useUserStore();
+  const { getUserById } = useUserStore();
+  const [commentUsers, setCommentUsers] = useState<{
+    [commentId: string]: string;
+  }>({});
 
   useEffect(() => {
     async function fetchData() {
@@ -26,28 +27,39 @@ const CommentList: React.FC<Props> = ({ postId }) => {
     fetchData();
   }, [getOnePost, getAllComments, postId]);
 
+  useEffect(() => {
+    async function fetchCommentUsers() {
+      const users: { [userId: string]: string } = {};
+
+      for (const comment of comments) {
+        const userId: string = comment.user?.toString() ?? "";
+        const user = await getUserById(userId);
+        const username = user?.username ?? "Unknown User";
+        users[comment._id] = username;
+      }
+
+      setCommentUsers(users);
+    }
+
+    fetchCommentUsers();
+  }, [comments, getUserById]);
+
   return (
     <div>
       <h1>Comment List</h1>
       <div>
         {Array.isArray(comments) && comments.length > 0 ? (
-          comments.map((comment: IComment) => {
-            const userId: string = (comment.user as ObjectId).toString();
-            const user: IUser | undefined = users[userId];
-            return (
-              <div key={comment._id}>
-                <h3>
-                  {user && "username" in user ? user.username : "Unknown User"}
-                </h3>
-                <p>{comment.body}</p>
-              </div>
-            );
-          })
+          comments.map((comment: IComment) => (
+            <div key={comment._id}>
+              <h3>{commentUsers[comment._id] ?? "Unknown User"}</h3>
+              <p>{comment.body}</p>
+            </div>
+          ))
         ) : (
           <p>No comments found</p>
         )}
       </div>
-      <Link to={`/posts/${postId}`}>Go back to Post</Link>
+      <Link to={`/posts`}>Go back to Posts</Link>
     </div>
   );
 };

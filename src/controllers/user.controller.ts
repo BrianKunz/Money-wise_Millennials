@@ -16,6 +16,24 @@ userController.get("/", async (req: Request, res: Response) => {
   }
 });
 
+// Get user by ID
+userController.get("/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error, request: req.url });
+  }
+  return;
+});
+
 // Create user
 userController.post("/signup", async (req: Request, res: Response) => {
   const { username, email, password, admin } = req.body;
