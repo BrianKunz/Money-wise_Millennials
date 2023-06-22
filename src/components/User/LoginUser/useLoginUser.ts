@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useUserStore } from "../../../stores/useUserStore";
 import { IUser } from "../../../models/user.model";
+import { useNavigate } from "react-router-dom";
 
 interface FormInputs {
   username: string;
@@ -8,6 +9,7 @@ interface FormInputs {
 }
 
 export function useLoginUser() {
+  const navigate = useNavigate(); // Access the navigate function
   const [loginFormInputs, setLoginFormInputs] = useState<FormInputs>({
     username: "",
     password: "",
@@ -24,7 +26,8 @@ export function useLoginUser() {
     }));
   };
 
-  const handleLoginSubmit = async () => {
+  const handleLoginSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     if (loadingLogin) {
       return;
     }
@@ -40,6 +43,7 @@ export function useLoginUser() {
         username: "",
         password: "",
       });
+      navigate("/posts");
     } catch (error) {
       console.error(error);
     } finally {

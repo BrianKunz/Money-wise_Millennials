@@ -36,7 +36,7 @@ export default function CreateUser() {
             id="password"
             type="password"
             name="password"
-            value={formInputs.email}
+            value={formInputs.password}
             onChange={handleFormChange}
             required
           />

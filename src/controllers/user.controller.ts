@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import User, { IUser } from "../models/user.model";
+import bcrypt from "bcrypt";
 
 const userController = express.Router();
 
@@ -60,12 +61,12 @@ userController.post("/signup", async (req: Request, res: Response) => {
 });
 
 // Login user
-userController.post("/login", (req: Request, res: Response, next) => {
+userController.post("/login", async (req: Request, res: Response, next) => {
   console.log("Login attempt:", req.body); // Log request body
 
   passport.authenticate(
     "local",
-    (err: Error, user: IUser | false, info?: { message: string }) => {
+    async (err: Error, user: IUser | false, info?: { message: string }) => {
       if (err) {
         console.error("Authentication error:", err); // Log authentication error
         return res.status(500).json(err);
@@ -74,29 +75,49 @@ userController.post("/login", (req: Request, res: Response, next) => {
       console.log("Authentication info:", info); // Log authentication info
 
       if (!user) {
+        console.log("No user found. Info:", info);
         return res
           .status(401)
           .json({ message: info ? info.message : "No user found." });
       }
 
-      req.logIn(user, (err) => {
-        if (err) {
-          console.error("Login error:", err); // Log login error
-          return res.status(500).json(err);
+      try {
+        // Compare the provided password with the hashed password
+        const isMatch = await bcrypt.compare(req.body.password, user.password);
+        console.log("Password comparison result:", isMatch);
+
+        if (!isMatch) {
+          console.log("Incorrect password.");
+          return res.status(401).json({ message: "Incorrect password." });
         }
 
-        // Generate JWT token
-        const secret = process.env.JWT_SECRET || "default-secret";
-        const token = jwt.sign({ userId: user._id, admin: user.admin }, secret);
+        req.logIn(user, (err) => {
+          if (err) {
+            console.error("Login error:", err); // Log login error
+            return res.status(500).json(err);
+          }
 
-        return res.json({
-          message: "Logged in successfully",
-          user: { id: user._id, username: user.username },
-          token, // return the token in the response
+          // Generate JWT token
+          const secret = process.env.SECRET || "default-secret";
+          const token = jwt.sign(
+            { userId: user._id, admin: user.admin },
+            secret
+          );
+
+          console.log("Login successful.");
+          return res.json({
+            message: "Logged in successfully",
+            user: { id: user._id, username: user.username },
+            token, // return the token in the response
+          });
         });
-      });
 
-      return;
+        // Add a return statement here
+        return;
+      } catch (error) {
+        console.error("Password comparison error:", error);
+        return res.status(500).json(error);
+      }
     }
   )(req, res, next);
 });
