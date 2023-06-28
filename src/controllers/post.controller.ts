@@ -7,8 +7,12 @@ const postController = express.Router();
 // Admin check middleware
 function isAdmin(req: Request, res: Response, next: NextFunction) {
   if (req.isAuthenticated() && (req.user as IUser).admin) {
+    console.log("User:", req.user); // Log the user details
+    console.log("isAdmin:", true); // Log the admin check result
     next();
   } else {
+    console.log("User:", req.user); // Log the user details
+    console.log("isAdmin:", false); // Log the admin check result
     res.status(403).json({ message: "Unauthorized" });
   }
 }

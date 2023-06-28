@@ -49,7 +49,7 @@ export const postService = {
     try {
       console.log("Post data: ", post);
 
-      const response = await fetch(`${baseURL}create`, {
+      const response = await fetch(`${baseURL}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
