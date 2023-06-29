@@ -27,6 +27,7 @@ passport.use(
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 passport.serializeUser((user: any, done) => {
+  console.log("Serialized user:", user);
   done(null, (user as IUser)._id);
 });
 
@@ -34,7 +35,9 @@ passport.deserializeUser(async function (
   id: string,
   done: (err: Error | null, user?: IUser) => void
 ) {
+  console.log("Deserialized user ID:", id);
   const user = await User.findById(id);
+  console.log("Deserialized user:", user);
   done(null, user || undefined);
 });
 
