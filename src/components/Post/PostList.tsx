@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { usePostStore } from "../../stores/usePostStore";
-import CreatePost from "./CreatePost/CreatePost";
 import { Link } from "react-router-dom";
 
 export default function PostList() {
@@ -13,7 +12,6 @@ export default function PostList() {
     <div>
       <div>
         <h1>Post List</h1>
-        <CreatePost />
         {Array.isArray(posts) && posts.length > 0 ? (
           posts.map((post) => (
             <div key={post._id}>

@@ -35,10 +35,15 @@ passport.deserializeUser(async function (
   id: string,
   done: (err: Error | null, user?: IUser) => void
 ) {
-  console.log("Deserialized user ID:", id);
-  const user = await User.findById(id);
-  console.log("Deserialized user:", user);
-  done(null, user || undefined);
+  try {
+    console.log("Deserialized user ID:", id);
+    const user = await User.findById(id);
+    console.log("Deserialized user:", user);
+    done(null, user || undefined);
+  } catch (error) {
+    console.error("Error in deserializeUser:", error);
+    done(error as Error);
+  }
 });
 
 export default passport;

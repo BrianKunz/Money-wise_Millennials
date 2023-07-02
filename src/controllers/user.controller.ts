@@ -61,65 +61,72 @@ userController.post("/signup", async (req: Request, res: Response) => {
 });
 
 // Login user
-userController.post("/login", async (req: Request, res: Response, next) => {
-  console.log("Login attempt:", req.body); // Log request body
+userController.post(
+  "/login",
+  passport.authenticate("local"),
+  async (req: Request, res: Response, next) => {
+    console.log("Login attempt:", req.body); // Log request body
 
-  passport.authenticate(
-    "local",
-    async (err: Error, user: IUser | false, info?: { message: string }) => {
-      if (err) {
-        console.error("Authentication error:", err); // Log authentication error
-        return res.status(500).json(err);
-      }
-
-      console.log("Authentication info:", info); // Log authentication info
-
-      if (!user) {
-        console.log("No user found. Info:", info);
-        return res
-          .status(401)
-          .json({ message: info ? info.message : "No user found." });
-      }
-
-      try {
-        // Compare the provided password with the hashed password
-        const isMatch = await bcrypt.compare(req.body.password, user.password);
-        console.log("Password comparison result:", isMatch);
-
-        if (!isMatch) {
-          console.log("Incorrect password.");
-          return res.status(401).json({ message: "Incorrect password." });
+    passport.authenticate(
+      "local",
+      async (err: Error, user: IUser | false, info?: { message: string }) => {
+        if (err) {
+          console.error("Authentication error:", err); // Log authentication error
+          return res.status(500).json(err);
         }
 
-        req.logIn(user, (err) => {
-          if (err) {
-            console.error("Login error:", err); // Log login error
-            return res.status(500).json(err);
+        console.log("Authentication info:", info); // Log authentication info
+
+        if (!user) {
+          console.log("No user found. Info:", info);
+          return res
+            .status(401)
+            .json({ message: info ? info.message : "No user found." });
+        }
+
+        try {
+          // Compare the provided password with the hashed password
+          const isMatch = await bcrypt.compare(
+            req.body.password,
+            user.password
+          );
+          console.log("Password comparison result:", isMatch);
+
+          if (!isMatch) {
+            console.log("Incorrect password.");
+            return res.status(401).json({ message: "Incorrect password." });
           }
 
-          // Generate JWT token
-          const secret = process.env.SECRET || "default-secret";
-          const token = jwt.sign(
-            { userId: user._id, admin: user.admin },
-            secret
-          );
+          req.logIn(user, (err) => {
+            if (err) {
+              console.error("Login error:", err); // Log login error
+              return res.status(500).json(err);
+            }
 
-          console.log("Login successful.");
-          return res.json({
-            message: "Logged in successfully",
-            user: { id: user._id, username: user.username },
-            token, // return the token in the response
+            // Generate JWT token
+            const secret = process.env.SECRET || "default-secret";
+            const token = jwt.sign(
+              { userId: user._id, admin: user.admin },
+              secret
+            );
+
+            console.log("Login successful.");
+            return res.json({
+              message: "Logged in successfully",
+              user: { id: user._id, username: user.username },
+              token, // return the token in the response
+            });
           });
-        });
 
-        // Add a return statement here
-        return;
-      } catch (error) {
-        console.error("Password comparison error:", error);
-        return res.status(500).json(error);
+          // Add a return statement here
+          return;
+        } catch (error) {
+          console.error("Password comparison error:", error);
+          return res.status(500).json(error);
+        }
       }
-    }
-  )(req, res, next);
-});
+    )(req, res, next);
+  }
+);
 
 export default userController;

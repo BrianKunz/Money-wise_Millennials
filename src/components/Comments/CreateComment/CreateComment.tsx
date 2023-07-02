@@ -24,6 +24,7 @@ export default function CreateComment({ post }: Props) {
             required
           />
         </div>
+        <button type="submit">Submit</button>
       </form>
     </div>
   );

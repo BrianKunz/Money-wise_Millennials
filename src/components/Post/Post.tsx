@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { usePostStore } from "../../stores/usePostStore";
 import CommentList from "../Comments/CommentList";
+import CreateComment from "../Comments/CreateComment/CreateComment";
 
 const Post: React.FC = () => {
   const { id = "" } = useParams();
@@ -32,6 +33,7 @@ const Post: React.FC = () => {
         <img src={post.image} alt={post.title} />
         <p>{post.body}</p>
       </div>
+      <CreateComment post={post} />
       <CommentList postId={post._id} />
     </div>
   );
