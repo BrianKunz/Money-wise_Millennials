@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import Comment from "../models/comment.model";
+import { IUser } from "../models/user.model";
 
 const commentController = express.Router();
 
@@ -20,10 +21,10 @@ commentController.get(
 
 // Get a comment by ID
 commentController.get(
-  "/posts/:id/comments/:id",
+  "/posts/:postId/comments/:commentId",
   async (req: Request, res: Response) => {
     try {
-      const comment = await Comment.findById(req.params.id);
+      const comment = await Comment.findById(req.params.commentId);
       if (!comment)
         return res.status(404).json({ message: "Comment not found." });
       res.json(comment);
@@ -41,27 +42,35 @@ commentController.post(
   async (req: Request, res: Response) => {
     try {
       const postId = req.params.id; // Extract the postId from the route parameter
-      console.log("Post ID:", postId); // Log the postId
-      const comment = new Comment({ ...req.body, postId }); // Assign the postId to the comment
-      console.log("Comment:", comment); // Log the comment object
+      const user = req.user as IUser; // Assuming you're using middleware to populate the user in the request object
+      if (!user) {
+        return res.status(401).json({ message: "User not authenticated." });
+      }
+      const comment = new Comment({
+        ...req.body,
+        user: user._id,
+        post: postId,
+      });
       await comment.save();
-      console.log("Comment saved:", comment); // Log the saved comment object
       res.status(201).json(comment);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: error });
     }
+    return;
   }
 );
 
 // Update a comment
 commentController.put(
-  "/posts/:id/comments/:id",
+  "/posts/:postId/comments/:commentId",
   async (req: Request, res: Response) => {
     try {
-      const comment = await Comment.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-      });
+      const comment = await Comment.findByIdAndUpdate(
+        req.params.commentId,
+        req.body,
+        { new: true }
+      );
       if (!comment)
         return res.status(404).json({ message: "Comment not found." });
       res.json(comment);
@@ -75,10 +84,10 @@ commentController.put(
 
 // Delete a comment
 commentController.delete(
-  "/posts/:id/comments/:id",
+  "/posts/:postId/comments/:commentId",
   async (req: Request, res: Response) => {
     try {
-      const comment = await Comment.findByIdAndDelete(req.params.id);
+      const comment = await Comment.findByIdAndDelete(req.params.commentId);
       if (!comment)
         return res.status(404).json({ message: "Comment not found." });
       res.status(204).json({ message: "Comment deleted." });

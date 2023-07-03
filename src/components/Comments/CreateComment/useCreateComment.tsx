@@ -2,15 +2,14 @@ import { useState } from "react";
 import { useCommentStore } from "../../../stores/useCommentStore";
 import { IPost } from "../../../models/post.model";
 import { IComment } from "../../../models/comment.model";
+import { IUser } from "../../../models/user.model";
 
 interface FormInputs {
-  timestamp: Date;
   body: string;
 }
 
 export function useCreateComment(post: IPost) {
   const [commentFormInputs, setCommentFormInputs] = useState<FormInputs>({
-    timestamp: new Date(),
     body: "",
   });
   const [loadingComments, setLoadingComments] = useState(false);
@@ -25,20 +24,25 @@ export function useCreateComment(post: IPost) {
     }));
   };
 
-  const handleCommentSubmit = async () => {
+  const handleCommentSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
     if (loadingComments) {
       return;
     }
+
     try {
       setLoadingComments(true);
-      const comment: IComment = {
+
+      const comment: Partial<IComment> = {
         body: commentFormInputs.body,
-        timestamp: commentFormInputs.timestamp,
-      } as IComment;
-      await createNewComment(comment, post);
+        post: post._id as unknown as IPost,
+        user: post.user?._id as unknown as IUser,
+      };
+
+      await createNewComment(comment as IComment, post);
       setCommentFormInputs({
         body: "",
-        timestamp: new Date(),
       });
     } catch (error) {
       console.error(error);
