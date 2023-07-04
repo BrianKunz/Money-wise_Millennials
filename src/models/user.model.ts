@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, ObjectId } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
 import bcrypt from "bcrypt";
 
 const SALT_ROUNDS = 12;
@@ -7,13 +7,21 @@ require("./comment.model");
 require("./post.model");
 
 export interface IUser extends Document {
-  _id?: string;
+  _id?: Types.ObjectId;
   email?: string;
   username: string;
   password: string;
+  token: string;
   admin?: boolean;
-  posts?: ObjectId[];
-  comments?: ObjectId[];
+  posts?: Types.ObjectId[] | Schema.Types.ObjectId[];
+  comments?: Types.ObjectId[] | Schema.Types.ObjectId[];
+}
+
+interface IUserWithUser extends IUser {
+  user: {
+    id: string;
+    username: string;
+  };
 }
 
 const UserSchema: Schema = new Schema({
@@ -31,4 +39,4 @@ UserSchema.pre("save", async function (this: IUser, next) {
   return next();
 });
 
-export default mongoose.model<IUser>("User", UserSchema);
+export default mongoose.model<IUserWithUser>("User", UserSchema);

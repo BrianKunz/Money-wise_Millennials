@@ -1,26 +1,49 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+import { userService } from "../services/userService";
 import { IUser } from "../models/user.model";
-import passport from "passport";
 
-function useAuth(): { isAuthenticated: boolean; user: IUser | null } {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+const useAuth = () => {
+  const [cookies, setCookie, removeCookie] = useCookies(["authToken"]);
   const [user, setUser] = useState<IUser | null>(null);
+  const navigate = useNavigate();
+  const authToken = cookies.authToken;
 
-  useEffect(() => {
-    // Implement your authentication logic here using Passport.js
-    passport.authenticate("local", (err, user) => {
-      if (err) {
-        console.error("Error authenticating user:", err);
-        return;
-      }
-      if (user) {
-        setIsAuthenticated(true);
-        setUser(user);
-      }
-    })();
-  }, []);
+  const login = async (username, password) => {
+    const user = {
+      username: username,
+      password: password,
+    };
+    try {
+      const response = await userService.login(user as IUser); // Cast 'user' as IUser
 
-  return { isAuthenticated, user };
-}
+      // Store the authentication token in cookies
+      setCookie("authToken", authToken);
+
+      // Set the user state
+      setUser(response);
+
+      // Redirect to the desired page
+      navigate("/dashboard"); // Replace "/dashboard" with your desired page
+    } catch (error) {
+      console.error("Error logging in: ", error);
+      // Handle login error
+    }
+  };
+
+  const logout = () => {
+    // Remove the authentication token from cookies
+    removeCookie("authToken");
+
+    // Clear the user state
+    setUser(null);
+
+    // Redirect to the login page or desired page
+    navigate("/login"); // Replace "/login" with your desired page
+  };
+
+  return { user, login, logout };
+};
 
 export default useAuth;
