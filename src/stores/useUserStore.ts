@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import create, { SetState } from "zustand";
 import { userService } from "../services/userService";
 import { IUser } from "../models/user.model";
 
@@ -13,7 +13,7 @@ type UserStore = {
   users: { [key: string]: IUser };
 };
 
-export const useUserStore = create<UserStore>((set) => ({
+export const useUserStore = create<UserStore>((set: SetState<UserStore>) => ({
   user: null,
   loading: false,
   error: null,
@@ -45,7 +45,8 @@ export const useUserStore = create<UserStore>((set) => ({
       const user = await userService.getUserById(userId);
       if (user) {
         set((state) => ({
-          users: { ...state.users, [user._id || ""]: user },
+          ...state,
+          users: { ...state.users, [(user._id || "").toString()]: user },
         }));
       }
       return user;

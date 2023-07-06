@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useUserStore } from "../../../stores/useUserStore";
 import { IUser } from "../../../models/user.model";
+import { Types } from "mongoose";
 
 export interface FormInputs {
   email: string;
@@ -32,15 +33,17 @@ export function useCreateUser() {
     try {
       setLoading(true);
       const newUser: Partial<IUser> = {
-        _id: "",
+        _id: new Types.ObjectId(),
         email: formInputs.email,
-        username: formInputs.username,
+        username: formInputs.username ?? "",
         password: formInputs.password,
+        token: "",
         admin: false,
         posts: [],
         comments: [],
       };
-      await createUser(newUser as IUser);
+
+      await createUser(newUser as IUser); // Explicitly cast newUser to IUser
       setFormInputs({
         email: "",
         username: "",

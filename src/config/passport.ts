@@ -1,28 +1,24 @@
 import passport from "passport";
-import { Strategy as LocalStrategy } from "passport-local";
-import bcrypt from "bcrypt";
+import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import User, { IUser } from "../models/user.model";
 
+const options = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET || "defaultSecret",
+};
+
 passport.use(
-  new LocalStrategy(
-    { usernameField: "username" },
-    async (username, password, done) => {
-      // Find the user by username
-      const user = await User.findOne({ username });
+  new JwtStrategy(options, async (jwtPayload, done) => {
+    try {
+      const user = await User.findById(jwtPayload.sub);
       if (!user) {
-        return done(null, false, { message: "User not found" });
+        return done(null, false);
       }
-
-      // Check if the password is correct
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-        return done(null, false, { message: "Incorrect password." });
-      }
-
-      // If everything passes, return the user
       return done(null, user);
+    } catch (error) {
+      return done(error, false);
     }
-  )
+  })
 );
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

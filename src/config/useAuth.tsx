@@ -25,7 +25,7 @@ const useAuth = () => {
       setUser(response);
 
       // Redirect to the desired page
-      navigate("/dashboard"); // Replace "/dashboard" with your desired page
+      navigate("/posts"); // Replace "/dashboard" with your desired page
     } catch (error) {
       console.error("Error logging in: ", error);
       // Handle login error
