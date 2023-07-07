@@ -44,6 +44,7 @@ export const commentService = {
           body: JSON.stringify(comment),
         }
       );
+      console.log("Authorization token: ", authToken);
 
       if (!response.ok) {
         throw new Error("Failed to create comment");

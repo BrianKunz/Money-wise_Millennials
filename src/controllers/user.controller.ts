@@ -19,11 +19,9 @@ userController.get("/", async (req: Request, res: Response) => {
 // Get user by ID
 userController.get("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
-  console.log({ id });
 
   try {
     const user = await User.findById(id);
-    console.log(user);
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }

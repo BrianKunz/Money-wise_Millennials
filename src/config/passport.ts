@@ -12,6 +12,7 @@ console.log("options: ", options);
 passport.use(
   new JwtStrategy(options, async (jwtPayload, done) => {
     try {
+      console.log("Decoded token: ", jwtPayload.sub);
       const user = await User.findById(jwtPayload.sub);
       if (!user) {
         return done(null, false);

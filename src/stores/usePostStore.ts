@@ -30,7 +30,6 @@ export const usePostStore = create<PostStore>((set, get) => ({
   },
   getOnePost: async (id) => {
     try {
-      console.log("Post ID: ", id);
       const post = await postService.getOne(id);
       set({ post });
     } catch (error) {
