@@ -2,6 +2,8 @@ import { IComment } from "../models/comment.model";
 
 const baseURL = "http://localhost:3001";
 
+const authToken = localStorage.getItem("authToken");
+
 export const commentService = {
   getAll: async (postId: string): Promise<IComment[]> => {
     try {
@@ -11,6 +13,7 @@ export const commentService = {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `${authToken}`,
           },
         }
       );
@@ -29,12 +32,14 @@ export const commentService = {
 
   create: async (postId: string, comment: IComment): Promise<IComment> => {
     try {
+      console.log(authToken);
       const response = await fetch(
         `${baseURL}/comments/posts/${postId}/comments`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `${authToken}`, // Pass the JWT token in the "Authorization" header
           },
           body: JSON.stringify(comment),
         }
@@ -60,6 +65,7 @@ export const commentService = {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `${authToken}`,
           },
         }
       );

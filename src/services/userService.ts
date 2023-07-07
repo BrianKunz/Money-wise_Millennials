@@ -5,8 +5,6 @@ const baseURL = "http://localhost:3001/users/";
 export const userService = {
   create: async (user: IUser): Promise<IUser> => {
     try {
-      console.log("User data: ", user);
-
       const response = await fetch(`${baseURL}signup`, {
         method: "POST",
         headers: {
@@ -21,7 +19,6 @@ export const userService = {
 
       const data = await response.json();
 
-      console.log(data);
       return data;
     } catch (error) {
       console.error("Error signing up: ", error);
@@ -44,12 +41,17 @@ export const userService = {
       }
 
       const data = await response.json();
+
+      // Store the authentication token in localStorage
+      localStorage.setItem("authToken", data.token);
+
       return data;
     } catch (error) {
       console.error("Error logging in: ", error);
       throw error;
     }
   },
+
   getUserById: async (userId: string): Promise<IUser> => {
     try {
       const response = await fetch(`${baseURL}${userId}`, {

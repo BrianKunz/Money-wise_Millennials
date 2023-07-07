@@ -7,12 +7,8 @@ const postController = express.Router();
 // Admin check middleware
 function isAdmin(req: Request, res: Response, next: NextFunction) {
   if (req.isAuthenticated() && (req.user as IUser).admin) {
-    console.log("User:", req.user); // Log the user details
-    console.log("isAdmin:", true); // Log the admin check result
     next();
   } else {
-    console.log("User:", req.user); // Log the user details
-    console.log("isAdmin:", false); // Log the admin check result
     res.status(403).json({ message: "Unauthorized" });
   }
 }
@@ -31,7 +27,6 @@ postController.get("/", async (_: Request, res: Response) => {
 // Get a post by ID with populated comments
 postController.get("/:id", async (req: Request, res: Response) => {
   try {
-    console.log("Post ID:", req.params.id);
     const post = await Post.findById(req.params.id).populate("comments");
     if (!post) return res.status(404).json({ message: "Post not found." });
     res.json(post);

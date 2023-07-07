@@ -45,10 +45,12 @@ commentController.post(
     try {
       const postId = req.params.id; // Extract the postId from the route parameter
       const user = req.user as IUser; // Assuming you're using middleware to populate the user in the request object
-      console.log("Logged-in user:", user);
       if (!user) {
         return res.status(401).json({ message: "User not authenticated." });
       }
+
+      console.log("Request body: ", req.body);
+
       const comment = new Comment({
         ...req.body,
         user: user._id,

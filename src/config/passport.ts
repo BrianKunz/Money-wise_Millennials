@@ -1,12 +1,14 @@
+import { Request, Response, NextFunction } from "express";
 import passport from "passport";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import User, { IUser } from "../models/user.model";
 
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET || "defaultSecret",
+  secretOrKey: process.env.SECRET,
 };
 
+console.log("options: ", options);
 passport.use(
   new JwtStrategy(options, async (jwtPayload, done) => {
     try {
@@ -41,5 +43,16 @@ passport.deserializeUser(async function (
     done(error as Error);
   }
 });
+
+// Log authToken
+export const logAuthToken = (
+  req: Request,
+  _res: Response,
+  next: NextFunction
+) => {
+  const authToken = req.headers.authorization;
+  console.log("authToken:", authToken);
+  next();
+};
 
 export default passport;
