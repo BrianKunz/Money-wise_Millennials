@@ -18,7 +18,8 @@ const Comment: React.FC = () => {
 
       // Fetch the comments for the post
       if (postInfo) {
-        await getAllComments(postInfo);
+        const authToken = localStorage.getItem("authToken") || "";
+        await getAllComments(postInfo, authToken);
       }
       setLoading(false);
     }
@@ -65,6 +66,10 @@ const Comment: React.FC = () => {
               : "Unknown User"}
           </h3>
           <p>{comment.body}</p>
+          <div>
+            <button>Edit</button>
+            <button>Delete</button>
+          </div>
         </div>
       ))}
     </div>

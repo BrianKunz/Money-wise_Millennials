@@ -1,23 +1,23 @@
 import { useState } from "react";
 import { useCommentStore } from "../../../stores/useCommentStore";
-import { IPost } from "../../../models/post.model";
 import { IComment } from "../../../models/comment.model";
-import { IUser } from "../../../models/user.model";
+import { IPost } from "../../../models/post.model";
 
 interface FormInputs {
   body: string;
 }
 
-export function useCreateComment(post: IPost) {
+export function useEditComment(comment: IComment) {
   const [commentFormInputs, setCommentFormInputs] = useState<FormInputs>({
-    body: "",
+    body: comment.body,
   });
   const [loadingComments, setLoadingComments] = useState(false);
-  const { createNewComment } = useCommentStore();
+  const { updateComment, deleteComment } = useCommentStore();
 
-  const handleCommentFormChange: React.ChangeEventHandler<
-    HTMLInputElement
-  > = async ({ target: { name, value } }) => {
+  const handleCommentFormChange: React.ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    const { name, value } = event.target;
     setCommentFormInputs((prevState) => ({
       ...prevState,
       [name]: value,
@@ -34,17 +34,13 @@ export function useCreateComment(post: IPost) {
     try {
       setLoadingComments(true);
 
-      const comment: Partial<IComment> = {
-        body: commentFormInputs.body,
-        post: post._id as unknown as IPost,
-        user: post.user?._id as unknown as IUser,
-      };
-
       const authToken = localStorage.getItem("authToken") || "";
-      await createNewComment(comment as IComment, post, authToken);
-      setCommentFormInputs({
-        body: "",
-      });
+      await updateComment(
+        comment._id,
+        commentFormInputs as IComment,
+        comment.post as IPost,
+        authToken
+      );
     } catch (error) {
       console.error(error);
     } finally {
@@ -52,9 +48,20 @@ export function useCreateComment(post: IPost) {
     }
   };
 
+  const handleCommentDelete = async () => {
+    try {
+      const authToken = localStorage.getItem("authToken") || "";
+      await deleteComment(comment._id, comment.post as IPost, authToken);
+      // Optionally, you can perform any additional cleanup or actions after deletion
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return {
     handleCommentFormChange,
     handleCommentSubmit,
+    handleCommentDelete,
     commentFormInputs,
   };
 }

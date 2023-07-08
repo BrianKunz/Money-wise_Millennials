@@ -1,11 +1,10 @@
 import { IComment } from "../models/comment.model";
+import jwtDecode from "jwt-decode";
 
 const baseURL = "http://localhost:3001";
 
-const authToken = localStorage.getItem("authToken");
-
 export const commentService = {
-  getAll: async (postId: string): Promise<IComment[]> => {
+  getAll: async (postId: string, authToken?: string): Promise<IComment[]> => {
     try {
       const response = await fetch(
         `${baseURL}/comments/posts/${postId}/comments`,
@@ -13,7 +12,7 @@ export const commentService = {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `${authToken}`,
+            Authorization: authToken ? `Bearer ${authToken}` : "",
           },
         }
       );
@@ -30,21 +29,29 @@ export const commentService = {
     }
   },
 
-  create: async (postId: string, comment: IComment): Promise<IComment> => {
+  create: async (
+    postId: string,
+    comment: IComment,
+    authToken?: string
+  ): Promise<IComment> => {
     try {
       console.log(authToken);
+      const decodedToken = jwtDecode(authToken || "");
+      console.log("Decoded Token: ", decodedToken);
+
       const response = await fetch(
         `${baseURL}/comments/posts/${postId}/comments`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `${authToken}`, // Pass the JWT token in the "Authorization" header
+            Authorization: authToken ? `Bearer ${authToken}` : "",
           },
           body: JSON.stringify(comment),
         }
       );
-      console.log("Authorization token: ", authToken);
+
+      console.log(authToken);
 
       if (!response.ok) {
         throw new Error("Failed to create comment");
@@ -58,7 +65,42 @@ export const commentService = {
     }
   },
 
-  delete: async (postId: string, id: string): Promise<void> => {
+  update: async (
+    postId: string,
+    commentId: string,
+    comment: Partial<IComment>,
+    authToken?: string
+  ): Promise<IComment> => {
+    try {
+      const response = await fetch(
+        `${baseURL}/comments/posts/${postId}/comments/${commentId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: authToken ? `Bearer ${authToken}` : "",
+          },
+          body: JSON.stringify(comment),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update comment");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error updating comment: ", error);
+      throw error;
+    }
+  },
+
+  delete: async (
+    postId: string,
+    id: string,
+    authToken?: string
+  ): Promise<void> => {
     try {
       const response = await fetch(
         `${baseURL}/comments/posts/${postId}/comments/${id}`,
@@ -66,7 +108,7 @@ export const commentService = {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `${authToken}`,
+            Authorization: authToken ? `Bearer ${authToken}` : "",
           },
         }
       );

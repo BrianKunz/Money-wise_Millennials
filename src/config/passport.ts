@@ -13,7 +13,7 @@ passport.use(
   new JwtStrategy(options, async (jwtPayload, done) => {
     try {
       console.log("Decoded token: ", jwtPayload.sub);
-      const user = await User.findById(jwtPayload.sub);
+      const user = await User.findById(jwtPayload.userId);
       if (!user) {
         return done(null, false);
       }

@@ -10,7 +10,9 @@ const Post: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log("fetching post 2");
     async function fetchPost() {
+      console.log("fetching post 3");
       await getOnePost(id);
       setLoading(false);
     }

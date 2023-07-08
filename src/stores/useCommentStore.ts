@@ -7,9 +7,19 @@ import { IUser } from "../models/user.model";
 interface CommentStore {
   comments: IComment[];
   user: IUser | null;
-  getAllComments: (post: IPost) => Promise<void>;
-  createNewComment: (comment: IComment, post: IPost) => Promise<void>;
-  deleteComment: (id: string, post: IPost) => Promise<void>;
+  getAllComments: (post: IPost, authToken: string) => Promise<void>;
+  createNewComment: (
+    comment: IComment,
+    post: IPost,
+    authToken: string
+  ) => Promise<void>;
+  updateComment: (
+    id: string,
+    comment: IComment,
+    post: IPost,
+    authToken: string
+  ) => Promise<void>;
+  deleteComment: (id: string, post: IPost, authToken: string) => Promise<void>;
 }
 
 export const useCommentStore = create<CommentStore>((set, get) => ({
@@ -17,7 +27,11 @@ export const useCommentStore = create<CommentStore>((set, get) => ({
   user: null,
   getAllComments: async (post) => {
     try {
-      const comments = await commentService.getAll(post._id.toString());
+      const authToken = localStorage.getItem("authToken") || "";
+      const comments = await commentService.getAll(
+        post._id.toString(),
+        authToken
+      );
       set({ comments });
     } catch (error) {
       console.error(error);
@@ -29,16 +43,29 @@ export const useCommentStore = create<CommentStore>((set, get) => ({
       if (user) {
         comment.user = user;
       }
-      await commentService.create(post._id.toString(), comment);
-      await get().getAllComments(post);
+      const authToken = localStorage.getItem("authToken") || "";
+      await commentService.create(post._id.toString(), comment, authToken);
+      await get().getAllComments(post, authToken);
     } catch (error) {
       console.error(error);
     }
   },
+
+  updateComment: async (id, comment, post) => {
+    try {
+      const authToken = localStorage.getItem("authToken") || "";
+      await commentService.update(post._id.toString(), id, comment, authToken);
+      await get().getAllComments(post, authToken);
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
   deleteComment: async (id, post) => {
     try {
+      const authToken = localStorage.getItem("authToken") || "";
       await commentService.delete(post._id.toString(), id);
-      await get().getAllComments(post);
+      await get().getAllComments(post, authToken);
     } catch (error) {
       console.error(error);
     }

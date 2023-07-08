@@ -42,6 +42,7 @@ commentController.post(
   "/posts/:id/comments",
   passport.authenticate("jwt", { session: false }),
   async (req: Request, res: Response) => {
+    console.log("Comment controller is being executed");
     try {
       const postId = req.params.id; // Extract the postId from the route parameter
       const user = req.user as IUser; // Assuming you're using middleware to populate the user in the request object

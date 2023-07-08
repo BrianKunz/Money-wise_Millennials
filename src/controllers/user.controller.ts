@@ -74,7 +74,7 @@ userController.post("/login", async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Invalid username or password" });
     }
 
-    const secret = process.env.JWT_SECRET || "default-secret";
+    const secret = process.env.SECRET || "default-secret";
     const token = jwt.sign({ userId: user._id, admin: user.admin }, secret);
 
     return res.json({
