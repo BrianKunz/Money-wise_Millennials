@@ -18,23 +18,24 @@ const CommentList: React.FC<Props> = React.memo(({ postId }) => {
   const [commentUsers, setCommentUsers] = useState<{
     [commentId: string]: string;
   }>({});
-  console.log("CommentList compontent mounted");
+  console.log("CommentList component mounted");
 
   useEffect(() => {
     console.log("Fetching post");
-    async function fetchData() {
-      console.log("Running fetchData");
+    async function fetchPost() {
       await getOnePost(postId);
-      const authToken = localStorage.getItem("authToken") || "";
-      await getAllComments({ _id: postId } as IPost, authToken);
     }
 
-    fetchData();
-  }, []);
+    console.log("fetching comment list 1");
+    fetchPost();
+  }, [getOnePost, postId]);
 
   useEffect(() => {
-    console.log("Fetching comment users");
-    async function fetchCommentUsers() {
+    console.log("Fetching comments and comment users");
+    async function fetchComments() {
+      const authToken = localStorage.getItem("authToken") || "";
+      await getAllComments({ _id: postId } as IPost, authToken);
+
       const users: { [userId: string]: string } = {};
 
       for (const comment of comments) {
@@ -49,9 +50,9 @@ const CommentList: React.FC<Props> = React.memo(({ postId }) => {
       setCommentUsers(users);
     }
 
-    console.log("Running fetchCommentUsers");
-    fetchCommentUsers();
-  }, []);
+    console.log("fetching comment list 1");
+    fetchComments();
+  }, [getOnePost, getAllComments, postId, comments, getUserById]);
 
   return (
     <div>

@@ -14,10 +14,10 @@ const Post: React.FC = () => {
     async function fetchPost() {
       console.log("fetching post 3");
       await getOnePost(id);
-      setLoading(false);
     }
 
     fetchPost();
+    setLoading(false);
   }, [getOnePost, id]);
 
   if (loading) {

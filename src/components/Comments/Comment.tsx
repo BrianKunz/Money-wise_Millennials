@@ -24,6 +24,7 @@ const Comment: React.FC = () => {
       setLoading(false);
     }
 
+    console.log("comment is setting this off");
     fetchPostAndComments();
   }, [getAllComments, id]);
 
