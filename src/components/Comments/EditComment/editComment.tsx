@@ -4,15 +4,16 @@ import { useEditComment } from "./useEditComment";
 
 interface Props {
   comment: IComment;
+  postId: string;
 }
 
-const EditComment: React.FC<Props> = ({ comment }) => {
+const EditComment: React.FC<Props> = ({ comment, postId }) => {
   const {
     commentFormInputs,
     handleCommentFormChange,
     handleCommentSubmit,
     handleCommentDelete,
-  } = useEditComment(comment);
+  } = useEditComment(comment, postId);
 
   return (
     <div>

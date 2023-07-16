@@ -7,7 +7,7 @@ interface FormInputs {
   body: string;
 }
 
-export function useEditComment(comment: IComment) {
+export function useEditComment(comment: IComment, postId: string) {
   const [commentFormInputs, setCommentFormInputs] = useState<FormInputs>({
     body: comment.body,
   });
@@ -38,7 +38,7 @@ export function useEditComment(comment: IComment) {
       await updateComment(
         comment._id,
         commentFormInputs as IComment,
-        comment.post as IPost,
+        { _id: postId } as IPost,
         authToken
       );
     } catch (error) {
@@ -51,7 +51,7 @@ export function useEditComment(comment: IComment) {
   const handleCommentDelete = async () => {
     try {
       const authToken = localStorage.getItem("authToken") || "";
-      await deleteComment(comment._id, comment.post as IPost, authToken);
+      await deleteComment(comment._id, { _id: postId } as IPost, authToken);
       // Optionally, you can perform any additional cleanup or actions after deletion
     } catch (error) {
       console.error(error);

@@ -18,7 +18,8 @@ const Post: React.FC = () => {
 
     fetchPost();
     setLoading(false);
-  }, [getOnePost, id]);
+  }, []);
+  // }, [getOnePost, id]);
 
   if (loading) {
     return <div>Loading...</div>;

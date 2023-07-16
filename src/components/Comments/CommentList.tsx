@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useCommentStore } from "../../stores/useCommentStore";
 import { IComment } from "../../models/comment.model";
-import { usePostStore } from "../../stores/usePostStore";
 import { IPost } from "../../models/post.model";
 import { useUserStore } from "../../stores/useUserStore";
 import EditComment from "./EditComment/editComment";
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const CommentList: React.FC<Props> = React.memo(({ postId }) => {
-  const { getOnePost } = usePostStore();
+  const { id = "" } = useParams();
   const { comments, getAllComments } = useCommentStore();
   const { getUserById } = useUserStore();
   const [commentUsers, setCommentUsers] = useState<{
@@ -21,20 +21,12 @@ const CommentList: React.FC<Props> = React.memo(({ postId }) => {
   console.log("CommentList component mounted");
 
   useEffect(() => {
-    console.log("Fetching post");
-    async function fetchPost() {
-      await getOnePost(postId);
-    }
-
-    console.log("fetching comment list 1");
-    fetchPost();
-  }, [getOnePost, postId]);
-
-  useEffect(() => {
     console.log("Fetching comments and comment users");
+
     async function fetchComments() {
       const authToken = localStorage.getItem("authToken") || "";
-      await getAllComments({ _id: postId } as IPost, authToken);
+      const postInfo = { _id: postId } as IPost;
+      await getAllComments(postInfo, authToken);
 
       const users: { [userId: string]: string } = {};
 
@@ -42,7 +34,7 @@ const CommentList: React.FC<Props> = React.memo(({ postId }) => {
         const userId: string = comment.user?.toString() ?? "";
         console.log("Fetching user by ID:", userId);
         const user = await getUserById(userId);
-        const username = user?.username ?? "Unknown User";
+        const username = user?.username ?? "";
         users[comment._id] = username;
       }
 
@@ -52,7 +44,7 @@ const CommentList: React.FC<Props> = React.memo(({ postId }) => {
 
     console.log("fetching comment list 1");
     fetchComments();
-  }, [getOnePost, getAllComments, postId, comments, getUserById]);
+  }, [getAllComments, postId]);
 
   return (
     <div>
@@ -66,7 +58,7 @@ const CommentList: React.FC<Props> = React.memo(({ postId }) => {
                 <p>{comment.body}</p>
               </div>
               <div>
-                <EditComment comment={comment} />
+                <EditComment comment={comment} postId={id} />
               </div>
             </div>
           ))
