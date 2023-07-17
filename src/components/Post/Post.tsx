@@ -3,23 +3,26 @@ import { useParams } from "react-router-dom";
 import { usePostStore } from "../../stores/usePostStore";
 import CommentList from "../Comments/CommentList";
 import CreateComment from "../Comments/CreateComment/CreateComment";
+import "./Post.scss";
 
 const Post: React.FC = () => {
   const { id = "" } = useParams();
   const { getOnePost, post } = usePostStore();
   const [loading, setLoading] = useState(true);
+  const [showCreateComment, setShowCreateComment] = useState(false);
 
   useEffect(() => {
-    console.log("fetching post 2");
     async function fetchPost() {
-      console.log("fetching post 3");
       await getOnePost(id);
+      setLoading(false);
     }
 
     fetchPost();
-    setLoading(false);
-  }, []);
-  // }, [getOnePost, id]);
+  }, [getOnePost, id]);
+
+  const handleCreateCommentClick = () => {
+    setShowCreateComment(!showCreateComment);
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -30,13 +33,21 @@ const Post: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="post-container">
       <div>
         <h1>{post.title}</h1>
         <img src={post.image} alt={post.title} />
         <p>{post.body}</p>
       </div>
-      <CreateComment post={post} />
+      <div className="create-comment-container">
+        <div
+          className="create-comment-trigger"
+          onClick={handleCreateCommentClick}
+        >
+          Click here to create comment
+        </div>
+        {showCreateComment && <CreateComment post={post} />}
+      </div>
       <CommentList postId={post._id} />
     </div>
   );

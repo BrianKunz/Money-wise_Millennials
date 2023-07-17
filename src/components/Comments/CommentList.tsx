@@ -18,6 +18,10 @@ const CommentList: React.FC<Props> = React.memo(({ postId }) => {
   const [commentUsers, setCommentUsers] = useState<{
     [commentId: string]: string;
   }>({});
+  const [selectedCommentId, setSelectedCommentId] = useState<string | null>(
+    null
+  );
+
   console.log("CommentList component mounted");
 
   useEffect(() => {
@@ -46,20 +50,26 @@ const CommentList: React.FC<Props> = React.memo(({ postId }) => {
     fetchComments();
   }, [getAllComments, postId]);
 
+  const handleCommentClick = (commentId: string) => {
+    setSelectedCommentId(commentId === selectedCommentId ? null : commentId);
+  };
+
   return (
     <div>
-      <h1>Comment List</h1>
+      <h1>Comments</h1>
       <div>
         {Array.isArray(comments) && comments.length > 0 ? (
           comments.map((comment: IComment) => (
             <div key={comment._id}>
-              <div>
+              <div onClick={() => handleCommentClick(comment._id)}>
                 <h3>{commentUsers[comment._id] ?? "Unknown User"}</h3>
                 <p>{comment.body}</p>
               </div>
-              <div>
-                <EditComment comment={comment} postId={id} />
-              </div>
+              {selectedCommentId === comment._id && (
+                <div>
+                  <EditComment comment={comment} postId={id} />
+                </div>
+              )}
             </div>
           ))
         ) : (
