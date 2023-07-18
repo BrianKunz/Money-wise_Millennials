@@ -62,7 +62,7 @@ const CommentList: React.FC<Props> = React.memo(({ postId }) => {
           comments.map((comment: IComment) => (
             <div key={comment._id}>
               <div onClick={() => handleCommentClick(comment._id)}>
-                <h3>{commentUsers[comment._id] ?? "Unknown User"}</h3>
+                <h3>{commentUsers[comment._id] ?? ""}</h3>
                 <p>{comment.body}</p>
               </div>
               {selectedCommentId === comment._id && (

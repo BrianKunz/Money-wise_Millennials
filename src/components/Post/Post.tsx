@@ -39,11 +39,8 @@ const Post: React.FC = () => {
         <img src={post.image} alt={post.title} />
         <p>{post.body}</p>
       </div>
-      <div className="create-comment-container">
-        <div
-          className="create-comment-trigger"
-          onClick={handleCreateCommentClick}
-        >
+      <div>
+        <div onClick={handleCreateCommentClick}>
           Click here to create comment
         </div>
         {showCreateComment && <CreateComment post={post} />}
