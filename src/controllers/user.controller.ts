@@ -75,7 +75,10 @@ userController.post("/login", async (req: Request, res: Response) => {
     }
 
     const secret = process.env.SECRET || "default-secret";
-    const token = jwt.sign({ userId: user._id, admin: user.admin }, secret);
+    const token = jwt.sign(
+      { userId: user._id, admin: user.admin, username: user.username },
+      secret
+    );
 
     return res.json({
       message: "Logged in successfully",

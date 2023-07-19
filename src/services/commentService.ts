@@ -51,8 +51,6 @@ export const commentService = {
         }
       );
 
-      console.log(authToken);
-
       if (!response.ok) {
         throw new Error("Failed to create comment");
       }

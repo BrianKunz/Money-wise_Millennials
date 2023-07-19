@@ -43,7 +43,7 @@ export const userService = {
       const data = await response.json();
 
       // Store the authentication token in localStorage
-      localStorage.setItem("authToken", data.token);
+      sessionStorage.setItem("authToken", data.token);
 
       return data;
     } catch (error) {

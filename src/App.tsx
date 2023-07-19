@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import PostList from "./components/Post/PostList";
 import Post from "./components/Post/Post";
@@ -7,8 +7,15 @@ import NavBar from "./components/Comments/NavBar/NavBar";
 import "./App.scss";
 
 const App: React.FC = () => {
-  // Example condition to determine the initial route based on user authentication
-  const isLoggedIn = false;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if authToken exists in sessionStorage
+    const authToken = sessionStorage.getItem("authToken");
+    if (authToken) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   return (
     <BrowserRouter>

@@ -27,7 +27,7 @@ export const useCommentStore = create<CommentStore>((set, get) => ({
   user: null,
   getAllComments: async (post) => {
     try {
-      const authToken = localStorage.getItem("authToken") || "";
+      const authToken = sessionStorage.getItem("authToken") || "";
       const comments = await commentService.getAll(
         post._id.toString(),
         authToken
@@ -43,7 +43,7 @@ export const useCommentStore = create<CommentStore>((set, get) => ({
       if (user) {
         comment.user = user;
       }
-      const authToken = localStorage.getItem("authToken") || "";
+      const authToken = sessionStorage.getItem("authToken") || "";
       await commentService.create(post._id.toString(), comment, authToken);
       await get().getAllComments(post, authToken);
     } catch (error) {
@@ -53,7 +53,7 @@ export const useCommentStore = create<CommentStore>((set, get) => ({
 
   updateComment: async (id, comment, post) => {
     try {
-      const authToken = localStorage.getItem("authToken") || "";
+      const authToken = sessionStorage.getItem("authToken") || "";
       await commentService.update(post._id.toString(), id, comment, authToken);
       await get().getAllComments(post, authToken);
     } catch (error) {
@@ -63,7 +63,7 @@ export const useCommentStore = create<CommentStore>((set, get) => ({
 
   deleteComment: async (id, post) => {
     try {
-      const authToken = localStorage.getItem("authToken") || "";
+      const authToken = sessionStorage.getItem("authToken") || "";
       await commentService.delete(post._id.toString(), id);
       await get().getAllComments(post, authToken);
     } catch (error) {
