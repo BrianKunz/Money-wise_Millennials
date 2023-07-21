@@ -22,12 +22,10 @@ const CommentList: React.FC<Props> = React.memo(({ postId }) => {
     null
   );
 
-  console.log("CommentList component mounted");
-
   useEffect(() => {
     console.log("Fetching comments and comment users");
 
-    async function fetchComments() {
+    async function fetchCommentsAndUsers() {
       const authToken = localStorage.getItem("authToken") || "";
       const postInfo = { _id: postId } as IPost;
       await getAllComments(postInfo, authToken);
@@ -46,9 +44,8 @@ const CommentList: React.FC<Props> = React.memo(({ postId }) => {
       setCommentUsers(users);
     }
 
-    console.log("fetching comment list 1");
-    fetchComments();
-  }, [getAllComments, postId]);
+    fetchCommentsAndUsers();
+  }, []);
 
   const handleCommentClick = (commentId: string) => {
     setSelectedCommentId(commentId === selectedCommentId ? null : commentId);
