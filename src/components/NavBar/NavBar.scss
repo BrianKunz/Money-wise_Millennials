@@ -13,6 +13,8 @@ nav ul {
   margin: 0;
   padding: 0;
   font-size: 1vw;
+  flex-grow: 1;
+  justify-content: center;
 }
 
 nav ul li {

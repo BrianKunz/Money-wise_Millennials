@@ -38,12 +38,12 @@ export default function NavBar() {
         <li>
           <Link to="/posts">Posts</Link>
         </li>
-        <li>
+        {/* <li>
           <Link to="/">Worksheets</Link>
-        </li>
-        <li>
+        </li> */}
+        {/* <li>
           <Link to="/">Quick Tips</Link>
-        </li>
+        </li> */}
         {isLoggedIn ? (
           <>
             <li>

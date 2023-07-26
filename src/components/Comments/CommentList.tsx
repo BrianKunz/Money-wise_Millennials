@@ -45,7 +45,7 @@ const CommentList: React.FC<Props> = React.memo(({ postId }) => {
     }
 
     fetchCommentsAndUsers();
-  }, []);
+  }, [getAllComments]);
 
   const handleCommentClick = (commentId: string) => {
     setSelectedCommentId(commentId === selectedCommentId ? null : commentId);

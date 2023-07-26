@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import PostList from "./components/Post/PostList";
 import Post from "./components/Post/Post";
 import { User } from "./components/User/User";
-import NavBar from "./components/Comments/NavBar/NavBar";
+import NavBar from "./components/NavBar/NavBar";
 import "./App.scss";
 
 const App: React.FC = () => {

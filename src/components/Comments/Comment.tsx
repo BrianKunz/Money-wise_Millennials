@@ -11,7 +11,7 @@ const Comment: React.FC = () => {
 
   useEffect(() => {
     async function fetchComments() {
-      const authToken = localStorage.getItem("authToken") || "";
+      const authToken = sessionStorage.getItem("authToken") || "";
       await getAllComments({ _id: id } as IPost, authToken);
       setLoading(false);
     }

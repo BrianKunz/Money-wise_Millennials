@@ -34,13 +34,22 @@ export function useEditComment(comment: IComment, postId: string) {
     try {
       setLoadingComments(true);
 
-      const authToken = localStorage.getItem("authToken") || "";
-      await updateComment(
-        comment._id,
-        commentFormInputs as IComment,
-        { _id: postId } as IPost,
-        authToken
-      );
+      const authToken = sessionStorage.getItem("authToken") || "";
+      const decodedToken = JSON.parse(atob(authToken.split(".")[1]));
+      const userIdFromToken = decodedToken.userId;
+
+      if (userIdFromToken === comment.user) {
+        // The user is authorized to edit the comment
+        await updateComment(
+          comment._id,
+          commentFormInputs as IComment,
+          { _id: postId } as IPost,
+          authToken
+        );
+      } else {
+        // The user is not authorized to edit the comment
+        window.alert("Unauthorized to edit the comment.");
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -50,9 +59,17 @@ export function useEditComment(comment: IComment, postId: string) {
 
   const handleCommentDelete = async () => {
     try {
-      const authToken = localStorage.getItem("authToken") || "";
-      await deleteComment(comment._id, { _id: postId } as IPost, authToken);
-      // Optionally, you can perform any additional cleanup or actions after deletion
+      const authToken = sessionStorage.getItem("authToken") || "";
+      const decodedToken = JSON.parse(atob(authToken.split(".")[1]));
+      const userIdFromToken = decodedToken.userId;
+
+      if (userIdFromToken === comment.user) {
+        // The user is authorized to delete the comment
+        await deleteComment(comment._id, { _id: postId } as IPost, authToken);
+      } else {
+        // The user is not authorized to delete the comment
+        window.alert("Unauthorized to delete the comment.");
+      }
     } catch (error) {
       console.error(error);
     }
