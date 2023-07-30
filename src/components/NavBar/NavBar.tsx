@@ -9,20 +9,12 @@ export default function NavBar() {
   useEffect(() => {
     // Check if the user is logged in based on the authToken in sessionStorage
     const authToken = sessionStorage.getItem("authToken");
-    console.log(authToken);
     setIsLoggedIn(!!authToken);
 
     // Retrieve the username from sessionStorage
     setUsername(
       authToken ? JSON.parse(atob(authToken.split(".")[1])).username : ""
     );
-
-    if (authToken) {
-      const decodedToken = JSON.parse(atob(authToken.split(".")[1]));
-      console.log(decodedToken);
-    } else {
-      console.log("No authToken found.");
-    }
   }, []);
 
   const handleLogout = () => {
@@ -34,31 +26,30 @@ export default function NavBar() {
 
   return (
     <nav>
-      <ul>
-        <li>
-          <Link to="/posts">Posts</Link>
-        </li>
-        {/* <li>
-          <Link to="/">Worksheets</Link>
-        </li> */}
-        {/* <li>
-          <Link to="/">Quick Tips</Link>
-        </li> */}
+      <div className="left-section">
+        <ul>
+          <li>
+            <Link to="/posts">Posts</Link>
+          </li>
+          {/* <li>
+            <Link to="/">Worksheets</Link>
+          </li> */}
+          {/* <li>
+            <Link to="/">Quick Tips</Link>
+          </li> */}
+        </ul>
+      </div>
+
+      <div className="right-section">
         {isLoggedIn ? (
           <>
-            <li>
-              <p>{username}</p>
-            </li>
-            <li>
-              <button onClick={handleLogout}>Logout</button>
-            </li>
+            <p>{username}</p>
+            <button onClick={handleLogout}>Logout</button>
           </>
         ) : (
-          <li>
-            <Link to="/users">Log In</Link>
-          </li>
+          <Link to="/users">Log In</Link>
         )}
-      </ul>
+      </div>
     </nav>
   );
 }

@@ -13,8 +13,6 @@ nav ul {
   margin: 0;
   padding: 0;
   font-size: 1vw;
-  flex-grow: 1;
-  justify-content: center;
 }
 
 nav ul li {
@@ -41,8 +39,27 @@ nav ul li a.active {
   color: #29abf4;
 }
 
-button {
+/* Styles for the left section */
+nav .left-section {
+  display: flex;
+  align-items: center;
+}
+
+/* Styles for the right section */
+nav .right-section {
+  display: flex;
+  align-items: center;
+}
+
+nav .right-section button {
   background-color: #f4f4f4;
   color: #3245f1;
   border: grey;
+  margin-left: 1rem;
+}
+
+nav .right-section p {
+  color: #f4f4f4;
+  font-weight: 500;
+  margin-right: 1rem;
 }

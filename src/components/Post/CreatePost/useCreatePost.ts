@@ -16,14 +16,17 @@ export function useCreatePost() {
   });
   const [loadingPosts, setLoadingPosts] = useState(false);
   const { createNewPost } = usePostStore();
-  const handlePostFormChange: React.ChangeEventHandler<HTMLInputElement> = ({
-    target: { name, value },
-  }) => {
+
+  const handleFormInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
     setPostFormInputs((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
+
   const handlePostSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (loadingPosts) {
@@ -51,7 +54,7 @@ export function useCreatePost() {
 
   return {
     handlePostSubmit,
-    handlePostFormChange,
+    handleFormInputChange,
     postFormInputs,
   };
 }
