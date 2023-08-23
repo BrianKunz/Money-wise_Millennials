@@ -68,7 +68,7 @@ export function useEditComment(comment: IComment, postId: string) {
         await deleteComment(comment._id, { _id: postId } as IPost, authToken);
       } else {
         // The user is not authorized to delete the comment
-        window.alert("Unauthorized to delete the comment.");
+        window.alert("Unauthorized to delete this comment.");
       }
     } catch (error) {
       console.error(error);

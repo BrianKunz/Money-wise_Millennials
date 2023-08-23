@@ -10,8 +10,8 @@ interface PostStore {
   getAllPosts: () => Promise<void>;
   getOnePost: (id: string) => Promise<void | IPost>;
   createNewPost: (post: IPost) => Promise<void>;
-  updatePost: (post: IPost) => Promise<void>;
-  deletePost: (id: string) => Promise<void>;
+  updatePost: (post: IPost, authToken: string) => Promise<void>;
+  deletePost: (id: string, authToken: string) => Promise<void>;
 }
 
 export const usePostStore = create<PostStore>((set, get) => ({
@@ -20,9 +20,6 @@ export const usePostStore = create<PostStore>((set, get) => ({
   getAllPosts: async () => {
     try {
       const posts = await postService.getAll();
-      posts.forEach((post) => {
-        console.log(post._id); // Log the ID of each post
-      });
       set({ posts });
     } catch (error) {
       console.error(error);
@@ -50,9 +47,11 @@ export const usePostStore = create<PostStore>((set, get) => ({
       console.error(error);
     }
   },
+
   updatePost: async (post) => {
     try {
-      await postService.update(post, post._id.toString());
+      const authToken = sessionStorage.getItem("authToken") || "";
+      await postService.update(post, authToken);
       await get().getAllPosts();
     } catch (error) {
       console.error(error);
