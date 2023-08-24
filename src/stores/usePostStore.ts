@@ -50,8 +50,10 @@ export const usePostStore = create<PostStore>((set, get) => ({
 
   updatePost: async (post) => {
     try {
+      console.log("Post before update:", post);
       const authToken = sessionStorage.getItem("authToken") || "";
-      await postService.update(post, authToken);
+      console.log(post._id);
+      await postService.update(post._id.toString(), post, authToken);
       await get().getAllPosts();
     } catch (error) {
       console.error(error);

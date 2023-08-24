@@ -70,16 +70,21 @@ export const postService = {
     }
   },
 
-  update: async (post: IPost, id: string): Promise<IPost> => {
+  update: async (
+    postId: string,
+    updatedPost: IPost,
+    authToken?: string
+  ): Promise<IPost> => {
     try {
-      console.log("Post data: ", post);
+      console.log("Updated Post data: ", updatedPost);
 
-      const response = await fetch(`${baseURL}${id}`, {
+      const response = await fetch(`${baseURL}${postId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: authToken ? `Bearer ${authToken}` : "",
         },
-        body: JSON.stringify(post),
+        body: JSON.stringify(updatedPost),
       });
 
       if (!response.ok) {
