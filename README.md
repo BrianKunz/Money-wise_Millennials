@@ -16,7 +16,7 @@ Money Wise Millennial is a full-stack financial blog created to offer valuable i
 
 To get started with Money Wise Millennial, follow these steps:
 
-1. Clone the repository: `git clone [ttps://github.com/BrianKunz/Money-wise_Millenials/tree/master]`
+1. Clone the repository: `git clone https://github.com/BrianKunz/Money-wise_Millenials/tree/master`
 2. Navigate to the project directory: `cd money-wise-millennial`
 3. Install dependencies using Yarn: `yarn install`
 
