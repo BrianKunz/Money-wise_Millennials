@@ -1,6 +1,7 @@
 import { IUser } from "../models/user.model";
 
-const baseURL = "http://localhost:3001/users/";
+const baseURL =
+  "https://money-wise-millennials-mvjd9.ondigitalocean.app/users/";
 
 export const userService = {
   create: async (user: IUser): Promise<IUser> => {

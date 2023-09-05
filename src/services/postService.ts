@@ -1,6 +1,7 @@
 import { IPost } from "../models/post.model";
 
-const baseURL = "http://localhost:3001/posts/";
+const baseURL =
+  "https://money-wise-millennials-mvjd9.ondigitalocean.app/posts/";
 
 export const postService = {
   getAll: async (): Promise<IPost[]> => {
