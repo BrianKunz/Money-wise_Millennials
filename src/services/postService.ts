@@ -1,7 +1,7 @@
 import { IPost } from "../models/post.model";
 
-const baseURL =
-  "https://money-wise-millennials-mvjd9.ondigitalocean.app/posts/";
+const HOST = process.env.HOST;
+const baseURL = `http://${HOST}/posts/`;
 
 export const postService = {
   getAll: async (): Promise<IPost[]> => {

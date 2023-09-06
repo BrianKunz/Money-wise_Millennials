@@ -1,7 +1,8 @@
 import { IComment } from "../models/comment.model";
 import jwtDecode from "jwt-decode";
 
-const baseURL = "https://money-wise-millennials-mvjd9.ondigitalocean.app/";
+const HOST = process.env.HOST;
+const baseURL = `http://${HOST}`;
 
 export const commentService = {
   getAll: async (postId: string, authToken?: string): Promise<IComment[]> => {

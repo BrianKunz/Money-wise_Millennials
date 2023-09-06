@@ -10,7 +10,8 @@ import commentController from "./controllers/comment.controller";
 import passport from "./config/passport";
 import cors from "cors";
 
-const PORT = process.env.PORT || 3001;
+const HOST = process.env.HOST || "0.0.0.0";
+const PORT = 3001;
 
 //Connect to database
 connect();
@@ -41,6 +42,6 @@ app.get("/", (_, res) => {
   res.json({ message: "Service is alive" });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is starting on PORT: ${PORT}`);
+app.listen(PORT, HOST, () => {
+  console.log(`Server is running on ${HOST}:${PORT}`);
 });
