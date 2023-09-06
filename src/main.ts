@@ -10,6 +10,7 @@ import commentController from "./controllers/comment.controller";
 import passport from "./config/passport";
 import cors from "cors";
 
+//Set HOST and PORT
 const HOST = process.env.HOST || "0.0.0.0";
 const PORT = 3001;
 
