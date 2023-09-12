@@ -11,7 +11,7 @@ import passport from "./config/passport";
 import cors from "cors";
 
 //Set HOST and PORT
-const HOST = process.env.HOST || "0.0.0.0";
+const HOST = process.env.HOSTURL || "0.0.0.0";
 const PORT = 3001;
 
 //Connect to database
@@ -46,3 +46,6 @@ app.get("/", (_, res) => {
 app.listen(PORT, HOST, () => {
   console.log(`Server is running on ${HOST}:${PORT}`);
 });
+// app.listen(PORT, () => {
+//   console.log(`Server is running on:${PORT}`);
+// });
