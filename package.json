@@ -13,6 +13,7 @@
     "ts-node": "ts-node",
     "docs": "typedoc --entryPoitns src/main.ts",
     "build": "tsc -p tsconfig.json",
+    "build:digitalocean": "yarn install --production=false && yarn run build && rm -rf node_modules && yarn install --production --frozen-lockfile",
     "build-all": "yarn clean && yarn build && yarn esbuild-node && yarn esbuild-browser",
     "test": "react-scripts test"
   },
