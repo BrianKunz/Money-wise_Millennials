@@ -5,7 +5,7 @@
   "repository": "https://github.com/BrianKunz/Money-wise_Millenials.git",
   "author": "Brian Kunz",
   "scripts": {
-    "start": "node -r esm main.ts",
+    "start": "node_modules/.bin/concurrently \"yarn server\" \"yarn dev\"",
     "server": "ts-node src/main.ts",
     "dev": "react-scripts start",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
@@ -25,7 +25,6 @@
     "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
-    "esm": "^3.2.25",
     "jsonwebtoken": "^9.0.0",
     "jwt-decode": "^3.1.2",
     "mongoose": "^7.2.0",
@@ -79,3 +78,4 @@
     ]
   }
 }
+
