@@ -1,6 +1,6 @@
 import { IPost } from "../models/post.model";
 
-const HOST = process.env.HOST;
+const HOST = process.env.HOSTURL;
 const baseURL = `http://${HOST}/posts/`;
 
 export const postService = {

@@ -1,7 +1,7 @@
 import { IComment } from "../models/comment.model";
 import jwtDecode from "jwt-decode";
 
-const HOST = process.env.HOST;
+const HOST = process.env.HOSTURL;
 const baseURL = `http://${HOST}`;
 
 export const commentService = {

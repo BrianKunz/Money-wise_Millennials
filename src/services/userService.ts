@@ -1,6 +1,6 @@
 import { IUser } from "../models/user.model";
 
-const HOST = process.env.HOST;
+const HOST = process.env.HOSTURL;
 const baseURL = `http://${HOST}/users/`;
 
 export const userService = {
