@@ -12,7 +12,7 @@ import cors from "cors";
 
 //Set HOST and PORT
 const HOST = process.env.HOSTURL || "0.0.0.0";
-const PORT = parseInt(process.env.PORTUSED || "3001", 10);
+const PORT = parseInt(process.env.PORTUSED || "8080", 10);
 
 //Connect to database
 connect();
