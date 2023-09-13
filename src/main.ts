@@ -12,7 +12,7 @@ import cors from "cors";
 
 //Set HOST and PORT
 const HOST = process.env.HOSTURL || "0.0.0.0";
-const PORT = 3001;
+const PORT = parseInt(process.env.PORTUSED || "3001", 10);
 
 //Connect to database
 connect();
@@ -44,8 +44,9 @@ app.get("/", (_, res) => {
 });
 
 app.listen(PORT, HOST, () => {
-  console.log(`Server is running on ${HOST}:${PORT}`);
+  console.log(`Server is running on http://${HOST}:${PORT}`);
 });
+
 // app.listen(PORT, () => {
 //   console.log(`Server is running on:${PORT}`);
 // });
