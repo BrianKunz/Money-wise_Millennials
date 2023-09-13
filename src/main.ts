@@ -43,6 +43,17 @@ app.get("/", (_, res) => {
   res.json({ message: "Service is alive" });
 });
 
+app.get("/", (req, res) => {
+  // listen for the 'close' event on the request
+  req.on("close", () => {
+    console.log("closed connection");
+  });
+
+  if (res.socket) {
+    console.log(res.socket.destroyed); // true if socket is closed
+  }
+});
+
 app.listen(PORT, HOST, () => {
   console.log(`Server is running on http://${HOST}:${PORT}`);
 });
