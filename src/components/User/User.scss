@@ -4,6 +4,13 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
+
+  img {
+    max-width: 100%; /* Ensure the image doesn't exceed container width */
+    max-height: 300px; /* Set a maximum height for the image */
+    margin-bottom: 20px; /* Add some space between image and form */
+    margin-top: -20%; /* Added negative margin to move it up */
+  }
 }
 
 button {

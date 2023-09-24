@@ -2,7 +2,8 @@ import { IComment } from "../models/comment.model";
 import jwtDecode from "jwt-decode";
 
 const HOST = process.env.HOSTURL;
-const baseURL = `http://${HOST}`;
+const PORT = process.env.PORTUSED;
+const baseURL = `http://${HOST}:${PORT}`;
 
 export const commentService = {
   getAll: async (postId: string, authToken?: string): Promise<IComment[]> => {

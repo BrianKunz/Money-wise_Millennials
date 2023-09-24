@@ -1,7 +1,10 @@
 import { IUser } from "../models/user.model";
 
 const HOST = process.env.HOSTURL;
-const baseURL = `http://${HOST}/users/`;
+const PORT = process.env.PORTUSED;
+console.log(process.env.HOSTURL, process.env.PORTUSED);
+const baseURL = `http://${HOST}:${PORT}/users/`;
+console.log(baseURL);
 
 export const userService = {
   create: async (user: IUser): Promise<IUser> => {
