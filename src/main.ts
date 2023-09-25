@@ -11,7 +11,8 @@ import passport from "./config/passport";
 import cors from "cors";
 
 //Set HOST and PORT
-const HOST = process.env.HOSTURL || "0.0.0.0";
+// const HOST = process.env.HOSTURL || "0.0.0.0";
+const HOST = "0.0.0.0";
 const PORT = parseInt(process.env.PORTUSED || "8080", 10);
 
 //Connect to database
