@@ -15,6 +15,8 @@ const HOST = process.env.HOSTURL || "0.0.0.0";
 // const HOST = "0.0.0.0";
 const PORT = parseInt(process.env.PORTUSED || "8080", 10);
 
+console.log(`Using HOST: ${HOST}`);
+
 //Connect to database
 connect();
 
