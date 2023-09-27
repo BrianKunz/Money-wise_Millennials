@@ -9,7 +9,9 @@ const options = {
 };
 
 // console.log("options: ", options);
-// console.log("mongo-uri", process.env.MONGO_URI);
+console.log("mongo-uri", process.env.MONGO_URI);
+console.log("temp-mongo-uri", process.env.TEMP_MONGO_URI);
+
 passport.use(
   new JwtStrategy(options, async (jwtPayload, done) => {
     try {
