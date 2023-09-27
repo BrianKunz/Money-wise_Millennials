@@ -2,6 +2,7 @@ import Mongoose from "mongoose";
 
 export const connect = async () => {
   const uri = process.env.TEMP_MONGO_URI || "uri";
+  console.log(uri);
 
   try {
     const connection = await Mongoose.connect(uri);
