@@ -8,8 +8,8 @@ const options = {
   secretOrKey: process.env.SECRET,
 };
 
-console.log("options: ", options);
-console.log("mongo-uri", process.env.MONGO_URI);
+// console.log("options: ", options);
+// console.log("mongo-uri", process.env.MONGO_URI);
 passport.use(
   new JwtStrategy(options, async (jwtPayload, done) => {
     try {
