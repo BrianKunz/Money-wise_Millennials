@@ -13,7 +13,8 @@ import cors from "cors";
 //Set HOST and PORT
 const HOST = process.env.HOSTURL || "0.0.0.0";
 // const HOST = "0.0.0.0";
-const PORT = parseInt(process.env.PORTUSED || "80", 10);
+// const PORT = parseInt(process.env.PORTUSED || "8080", 10);
+const PORT = process.env.PORTUSED;
 
 console.log(`Using HOST: ${HOST}`);
 
@@ -57,7 +58,7 @@ app.get("/", (req, res) => {
   }
 });
 
-app.listen(PORT, HOST, () => {
+app.listen(HOST, () => {
   console.log(`Server is running on http://${HOST}:${PORT}`);
 });
 
