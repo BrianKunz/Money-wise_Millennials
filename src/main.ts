@@ -13,7 +13,7 @@ import cors from "cors";
 //Set HOST and PORT
 const HOST = process.env.HOSTURL || "0.0.0.0";
 // const HOST = "0.0.0.0";
-const PORT = parseInt(process.env.PORTUSED || "8080", 10);
+const PORT = parseInt(process.env.PORTUSED || "80", 10);
 
 console.log(`Using HOST: ${HOST}`);
 
