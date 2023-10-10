@@ -1,9 +1,9 @@
 import { IUser } from "../models/user.model";
 
-const HOST = process.env.HOSTURL;
-const PORT = process.env.PORTUSED;
-console.log(process.env.HOSTURL, process.env.PORTUSED);
-const baseURL = `http://${HOST}:${PORT}/users/`;
+// const HOST = process.env.HOSTURL;
+// const PORT = process.env.PORTUSED;
+// console.log(process.env.HOSTURL, process.env.PORTUSED);
+const baseURL = `http://${process.env.HOST}:${process.env.PORT}/users/`;
 console.log(baseURL);
 
 export const userService = {

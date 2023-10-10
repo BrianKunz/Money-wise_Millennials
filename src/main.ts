@@ -11,12 +11,12 @@ import passport from "./config/passport";
 import cors from "cors";
 
 //Set HOST and PORT
-const HOST = process.env.HOSTURL || "0.0.0.0";
+// const HOST = process.env.HOSTURL || "0.0.0.0";
 // const HOST = "0.0.0.0";
 // const PORT = parseInt(process.env.PORTUSED || "8080", 10);
-const PORT = process.env.PORTUSED;
+// const PORT = process.env.PORTUSED;
 
-console.log(`Using HOST: ${HOST}`);
+console.log(`Using HOST: ${process.env.HOST}`);
 
 //Connect to database
 connect();
@@ -47,21 +47,19 @@ app.get("/", (_, res) => {
   res.json({ message: "Service is alive" });
 });
 
-app.get("/", (req, res) => {
-  // listen for the 'close' event on the request
-  req.on("close", () => {
-    console.log("closed connection");
-  });
+// app.get("/", (req, res) => {
+//   // listen for the 'close' event on the request
+//   req.on("close", () => {
+//     console.log("closed connection");
+//   });
 
-  if (res.socket) {
-    console.log(res.socket.destroyed); // true if socket is closed
-  }
-});
-
-app.listen(HOST, () => {
-  console.log(`Server is running on http://${HOST}:${PORT}`);
-});
-
-// app.listen(PORT, () => {
-//   console.log(`Server is running on:${PORT}`);
+//   if (res.socket) {
+//     console.log(res.socket.destroyed); // true if socket is closed
+//   }
 // });
+
+app.listen(process.env.HOST, () => {
+  console.log(
+    `Server is running on http://${process.env.HOST}:${process.env.PORT}`
+  );
+});

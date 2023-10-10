@@ -1,8 +1,8 @@
 import { IPost } from "../models/post.model";
 
-const HOST = process.env.HOSTURL;
-const PORT = process.env.PORTUSED;
-const baseURL = `http://${HOST}:${PORT}/posts/`;
+// const HOST = process.env.HOSTURL;
+// const PORT = process.env.PORTUSED;
+const baseURL = `http://${process.env.HOST}:${process.env.PORT}/posts/`;
 
 export const postService = {
   getAll: async (): Promise<IPost[]> => {
